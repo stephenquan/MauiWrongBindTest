@@ -41,7 +41,7 @@
 	</PropertyGroup>
 
 	<!-- Enable XAML Binding Diagnostics -->
-	<PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)' == 'Debug'">
 		<EnableDiagnostics>true</EnableDiagnostics>
 	</PropertyGroup>
 	
