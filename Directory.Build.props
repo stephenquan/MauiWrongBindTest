@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Project>
+  <PropertyGroup>
+    <Nullable>enable</Nullable>
+    <NoWarn>NETSDK1023</NoWarn>
+    <NetVersion>net10.0</NetVersion>
+    <LangVersion>preview</LangVersion>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+    <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
+    <AccelerateBuildsInVisualStudio>true</AccelerateBuildsInVisualStudio>
+    <GenerateErrorForMissingTargetingPacks>false</GenerateErrorForMissingTargetingPacks>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+
+    <!-- Prevent NuGet Package Vulnerabilities -->
+    <NuGetAudit>enable</NuGetAudit>
+    <NuGetAuditMode>all</NuGetAuditMode>
+
+    <!-- MAUI Specific -->
+    <MauiVersion>10.0.31</MauiVersion>
+    <MauiPackageVersion>10.0.31</MauiPackageVersion>
+    <NextMauiPackageVersion>10.0.0</NextMauiPackageVersion>
+    <MauiStrictXamlCompilation>true</MauiStrictXamlCompilation>
+    <SkipValidateMauiImplicitPackageReferences>true</SkipValidateMauiImplicitPackageReferences>
+    <MauiEnableXamlCBindingWithSourceCompilation>true</MauiEnableXamlCBindingWithSourceCompilation>
+
+    <!-- CommunityToolkit.Maui -->
+    <NoWarn>$(NoWarn);MCTEXP001;CS0436</NoWarn>
+
+    <!-- https://learn.microsoft.com/dotnet/core/deploying/native-aot/?tabs=net8plus%2Cwindows -->
+    <StripSymbols>false</StripSymbols>
+    <TrimmerSingleWarn>false</TrimmerSingleWarn>
+
+  </PropertyGroup>
+
+  <!-- Required for NuGet Source Link -->
+  <PropertyGroup Condition="'$(TF_BUILD)' == 'true' OR '$(GITHUB_ACTIONS)' == 'true'">
+    <!--  Ensure deterministic build when using Azure Pipelines or GitHub Actions-->
+    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+
+    <!-- Publish the repository URL in the built .nupkg (in the NuSpec <Repository> element) -->
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+
+    <!-- Embed source files that are not tracked by the source control manager in the PDB -->
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+
+    <!-- Embed symbols containing Source Link in the main file (exe/dll) -->
+    <DebugType>embedded</DebugType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <SupportedPlatform Include="Tizen" />
+    <InternalsVisibleTo Include="CommunityToolkit.Maui.UnitTests"/>
+    <InternalsVisibleTo Include="CommunityToolkit.Maui.Analyzers.UnitTests"/>
+  </ItemGroup>
+
+  <PropertyGroup Condition="('$(TF_BUILD)' == 'true' OR '$(GITHUB_ACTIONS)' == 'true') and $([MSBuild]::IsOSPlatform('windows')) == 'true'">
+    <IncludeTizenTargetFrameworks>true</IncludeTizenTargetFrameworks>
+  </PropertyGroup>
+</Project>
